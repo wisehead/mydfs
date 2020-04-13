@@ -165,7 +165,28 @@ main
 --threads[i].join();
 ```
 
+#7:test_multiblock_multiwrite.cpp
 
+```cpp
+main
+--filesystem->start(true);
+--filesystem->create(file_name.c_str(), create_options);
+--filesystem->open_writer(file_name.c_str(), write_options, &writer);
+--writer->pwrite(0, data_to_write.c_str(), (512 * 1024) , write_callback, &callback_checker1);
+--filesystem->open_reader(file_name.c_str(), read_options, &reader);
+--reader->pread(0, user_buf, (512 * 1024) , read_callback, &callback_checker2);
+--//write 0.5MB + 1.5MB
+--writer->pwrite(512 * 1024, data_to_write.c_str(), ((512 + 1024) * 1024) , write_callback, &callback_checker1);
+--//write 2MB + 0.5MB
+--writer->pwrite(2 * 1024 * 1024, data_to_write.c_str(), (512 * 1024) , write_callback, &callback_checker1);
+--//write 2.5MB + 1.5MB
+--writer->pwrite((2 * 1024 * 1024) + (512 * 1024), data_to_write.c_str(), ((512 + 1024) * 1024) , write_callback, &callback_checker1);
+--filesystem->close_writer(writer, close_callback, &sync_done1);
+--reader->pread((512 * 1024), user_buf, (1024 * 1024) , read_callback, &callback_checker3);
+--//for (int i=3; i <= 1024; ++i)
+--offset = base::fast_rand_less_than(1024 * 1024 - 1);
+--reader->pread(offset , user_buf, (1024 * 1024) - offset , read_callback, &callback_checker3);
+```
 
 
 
