@@ -253,5 +253,25 @@ main
 --filesystem->close_reader(reader);
 ```
 
+#13:test_storage_policy.cpp
+```cpp
+main
+
+```
+
+#14:test_truncate_file.cpp
+```cpp
+main
+--filesystem->start(true);
+--filesystem->create(file_name.c_str(), create_options);
+--filesystem->open_writer(file_name.c_str(), write_options, &writer);
+--writer->resize((2 * 1024 * 1024) , resize_callback, &sync_done);
+--writer->pwrite(1024*1024, data_to_write.c_str(), (1024 * 1024) , write_callback, &sync_done);
+--//truncate_lease之后，需要reopen
+--filesystem->truncate_lease(file_name.c_str());
+--filesystem->open_writer(file_name.c_str(), write_options, &writer2);
+--writer2->pwrite(0, data_to_write.c_str(), (1024 * 1024) , write_callback, &sync_done);
+--filesystem->close_writer(writer2, close_callback, &sync_done);
+```
 
 
