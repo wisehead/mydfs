@@ -225,7 +225,18 @@ main
 
 ```
 
-
+#11:test_refresh_file.cpp
+```cpp
+main
+--filesystem->start(true);
+--filesystem->create(file_name.c_str(), create_options);
+--filesystem->open_writer(file_name.c_str(), write_options, &writer);
+--writer->pwrite(0, data_to_write.c_str(), (1024 * 1024) , write_callback, &sync_done);
+--writer->pwrite(1024*1024, data_to_write.c_str(), (1024 * 1024) , write_callback, &sync_done);
+--filesystem->close_writer(writer, close_callback, &sync_done);
+--filesystem->open_reader(file_name.c_str(), read_options, &reader);
+--filesystem->close_reader(reader);
+```
 
 
 
