@@ -188,7 +188,23 @@ main
 --reader->pread(offset , user_buf, (1024 * 1024) - offset , read_callback, &callback_checker3);
 ```
 
-
+#8.test_oneblock_multiread.cpp
+```cpp
+main
+--filesystem->start(true);
+--filesystem->create(file_name.c_str(), create_options);
+--filesystem->open_writer(file_name.c_str(), write_options, &writer);
+--//write 0 + 16K
+--writer->pwrite(0, data_to_write.c_str(), (16 * 1024) , write_callback, &callback_checker1);
+--filesystem->open_reader(file_name.c_str(), read_options, &reader);
+--reader->pread(0, user_buf, (16 * 1024) , read_callback, &callback_checker2);
+--filesystem->close_writer(writer, close_callback, &sync_done1);
+--//read EOF????
+--reader->pread((16 * 1024), user_buf, (16 * 1024) , read_callback, &callback_checker3);
+--//for (int i=3; i <= 1024; ++i)
+--offset = base::fast_rand_less_than(16*1024 - 1);
+--reader->pread(offset , user_buf, (16 * 1024) - offset , read_callback, &callback_checker3);
+```
 
 
 
